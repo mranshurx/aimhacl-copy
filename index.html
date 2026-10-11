@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER-ENGINE // Node Control Panel</title>
+    <title>CYBER-ENGINE // TLS Node Control</title>
     <style>
         :root {
             --bg-color: #0a0b10;
@@ -165,7 +165,7 @@
 <div class="container">
     <div class="header">
         <h1>Cyber Engine</h1>
-        <p>Render Cloud Interceptor Panel</p>
+        <p>Render Secure Cloud Panel</p>
     </div>
 
     <div class="status-card">
@@ -174,8 +174,8 @@
             <span class="value" style="font-size: 0.75rem;">aimhackl-proxy-server.onrender.com</span>
         </div>
         <div class="status-row">
-            <span class="label">Protocol:</span>
-            <span class="value">VLESS / WS</span>
+            <span class="label">Security Mode:</span>
+            <span class="value" style="color:var(--accent-green);">TLS Encrypted</span>
         </div>
         <div class="status-row">
             <span class="label">Status:</span>
@@ -196,13 +196,14 @@
         <ol>
             <li>Tap <b>Add to Happ</b> above.</li>
             <li>In <b>Happ</b>, tap <b>+</b> and select <b>Import from Clipboard</b>.</li>
-            <li>Direct Subscription URL: <br><code style="color:var(--accent-cyan);">https://aimhackl-proxy-server.onrender.com/sub</code></li>
+            <li>Happ will import the node securely over TLS with zero errors!</li>
         </ol>
     </div>
 </div>
 
 <script>
-    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@aimhackl-proxy-server.onrender.com:443?encryption=none&type=ws&path=/intercept#CYBER-ENGINE-Cloud";
+    // Updated VLESS configuration string enforcing TLS encryption for public domains
+    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@aimhackl-proxy-server.onrender.com:443?security=tls&encryption=none&type=ws&path=/intercept&fp=chrome#CYBER-ENGINE-Cloud";
 
     function addNodeToHapp() {
         const toast = document.getElementById('toast');
