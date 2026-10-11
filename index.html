@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER-ENGINE // Auto-Inject Node</title>
+    <title>CYBER-ENGINE // Node Control Panel</title>
     <style>
         :root {
             --bg-color: #0a0b10;
@@ -151,11 +151,12 @@
             background: var(--accent-green);
             color: #000;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.85rem;
             margin-top: 12px;
+            box-shadow: 0 0 15px rgba(0,255,102,0.4);
         }
     </style>
 </head>
@@ -164,64 +165,59 @@
 <div class="container">
     <div class="header">
         <h1>Cyber Engine</h1>
-        <p>Auto-Import Node Control Panel</p>
+        <p>Render Cloud Node Control</p>
     </div>
 
     <div class="status-card">
         <div class="status-row">
-            <span class="label">Cloud Node:</span>
-            <span class="value">Render Server</span>
-        </div>
-        <div class="status-row">
-            <span class="label">Target Endpoint:</span>
+            <span class="label">Server Target:</span>
             <span class="value" style="font-size: 0.75rem;">aimhackl-proxy-server.onrender.com</span>
         </div>
         <div class="status-row">
+            <span class="label">Protocol:</span>
+            <span class="value">VLESS / WS</span>
+        </div>
+        <div class="status-row">
             <span class="label">Status:</span>
-            <span class="value"><span class="indicator"></span>READY FOR INJECT</span>
+            <span class="value"><span class="indicator"></span>ONLINE</span>
         </div>
     </div>
 
-    <button class="btn-happ" onclick="autoImportToHapp()">
+    <button class="btn-happ" onclick="copyConfigToClipboard()">
         ⚡ Add to Happ
     </button>
 
     <div id="toast" class="notification">
-        Launching Happ & Adding Node...
+        ✅ Copied to Clipboard! Open Happ & Import.
     </div>
 
     <div class="instructions">
-        <h2>Quick Connect</h2>
+        <h2>Connection Steps</h2>
         <ol>
-            <li>Tap <b>Add to Happ</b> above.</li>
-            <li>Happ will open automatically and parse the subscription payload.</li>
-            <li>Hit connect to route your data straight through your server!</li>
+            <li>Tap <b>Add to Happ</b> (copies the secure node configuration).</li>
+            <li>Open the <b>Happ</b> app on your phone.</li>
+            <li>Tap the <b>+</b> icon in the top right and select <b>Import from Clipboard</b>.</li>
+            <li>Connect and watch your Render logs light up!</li>
         </ol>
     </div>
 </div>
 
 <script>
-    const cloudDomain = "aimhackl-proxy-server.onrender.com";
-    
-    // Standard VLESS config payload format parsed natively by Happ deep-linking handlers
-    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@" + cloudDomain + ":443?encryption=none&type=ws&path=/intercept#CYBER-ENGINE-Cloud";
+    // Exact VLESS configuration payload targeting your Render server
+    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@aimhackl-proxy-server.onrender.com:443?encryption=none&type=ws&path=/intercept#CYBER-ENGINE-Cloud";
 
-    function autoImportToHapp() {
+    function copyConfigToClipboard() {
         const toast = document.getElementById('toast');
-        toast.style.display = 'block';
-        
-        // Encode the payload for deep-link handling
-        const encodedConfig = encodeURIComponent(vlessConfig);
-        
-        // Direct intent trigger scheme targeting the Happ application parser
-        const deepLinkUrl = "happ://add/?url=" + encodedConfig;
 
-        setTimeout(() => {
-            toast.style.display = 'none';
-        }, 3000);
-
-        // Fire direct location change to trigger the app intent handler
-        window.location.href = deepLinkUrl;
+        navigator.clipboard.writeText(vlessConfig).then(() => {
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 4000);
+        }).catch(err => {
+            // Fallback prompt if browser blocks clipboard write
+            prompt("Copy this configuration manually:", vlessConfig);
+        });
     }
 </script>
 
