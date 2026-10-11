@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER-ENGINE // Happ Node Control</title>
+    <title>CYBER-ENGINE // Auto-Inject Node</title>
     <style>
         :root {
             --bg-color: #0a0b10;
@@ -87,6 +87,9 @@
         .value {
             font-weight: 600;
             font-family: monospace;
+            word-break: break-all;
+            max-width: 220px;
+            text-align: right;
         }
 
         .indicator {
@@ -161,67 +164,64 @@
 <div class="container">
     <div class="header">
         <h1>Cyber Engine</h1>
-        <p>Chromebook Interceptor Control Panel</p>
+        <p>Auto-Import Node Control Panel</p>
     </div>
 
     <div class="status-card">
         <div class="status-row">
-            <span class="label">Target Server:</span>
-            <span class="value">Chromebook Linux</span>
+            <span class="label">Cloud Node:</span>
+            <span class="value">Render Server</span>
         </div>
         <div class="status-row">
-            <span class="label">Local IP Address:</span>
-            <span class="value">100.115.92.26</span>
-        </div>
-        <div class="status-row">
-            <span class="label">Listen Port:</span>
-            <span class="value">8443</span>
+            <span class="label">Target Endpoint:</span>
+            <span class="value" style="font-size: 0.75rem;">aimhackl-proxy-server.onrender.com</span>
         </div>
         <div class="status-row">
             <span class="label">Status:</span>
-            <span class="value"><span class="indicator"></span>READY</span>
+            <span class="value"><span class="indicator"></span>READY FOR INJECT</span>
         </div>
     </div>
 
-    <button class="btn-happ" onclick="addNodeToHapp()">
+    <button class="btn-happ" onclick="autoImportToHapp()">
         ⚡ Add to Happ
     </button>
 
     <div id="toast" class="notification">
-        Config copied! Opening Happ...
+        Launching Happ & Adding Node...
     </div>
 
     <div class="instructions">
-        <h2>Setup Flow</h2>
+        <h2>Quick Connect</h2>
         <ol>
-            <li>Tap <b>Add to Happ</b> above to copy the payload link.</li>
-            <li>In <b>Happ</b>, tap <b>+</b> and select <i>Import from Clipboard</i>.</li>
-            <li>Set Happ Routing Mode to <b>Global Proxy</b>.</li>
-            <li>Connect to begin routing packets to your Chromebook terminal.</li>
+            <li>Tap <b>Add to Happ</b> above.</li>
+            <li>Happ will open automatically and parse the subscription payload.</li>
+            <li>Hit connect to route your data straight through your server!</li>
         </ol>
     </div>
 </div>
 
 <script>
-    // Hardcoded VLESS configuration string targeting your local Chromebook container
-    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@100.115.92.26:8443?encryption=none&type=tcp#CYBER-ENGINE-Chromebook";
+    const cloudDomain = "aimhackl-proxy-server.onrender.com";
+    
+    // Standard VLESS config payload format parsed natively by Happ deep-linking handlers
+    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@" + cloudDomain + ":443?encryption=none&type=ws&path=/intercept#CYBER-ENGINE-Cloud";
 
-    function addNodeToHapp() {
+    function autoImportToHapp() {
         const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        
+        // Encode the payload for deep-link handling
+        const encodedConfig = encodeURIComponent(vlessConfig);
+        
+        // Direct intent trigger scheme targeting the Happ application parser
+        const deepLinkUrl = "happ://add/?url=" + encodedConfig;
 
-        // Copy configuration to clipboard
-        navigator.clipboard.writeText(vlessConfig).then(() => {
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
 
-            // Attempt to trigger the deep-link action to bring Happ to the foreground
-            window.location.href = "happ://import";
-        }).catch(err => {
-            // Fallback for browsers with strict permission policies
-            prompt("Copy configuration manually:", vlessConfig);
-        });
+        // Fire direct location change to trigger the app intent handler
+        window.location.href = deepLinkUrl;
     }
 </script>
 
