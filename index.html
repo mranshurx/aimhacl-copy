@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER-ENGINE // Happ Node Control</title>
+    <title>CYBER-ENGINE // Node Control Panel</title>
     <style>
         :root {
             --bg-color: #0a0b10;
@@ -19,7 +19,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
@@ -97,3 +97,128 @@
             width: 8px;
             height: 8px;
             background-color: var(--accent-green);
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .btn-happ {
+            width: 100%;
+            background: linear-gradient(135deg, #00f3ff 0%, #0088ff 100%);
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .btn-happ:active {
+            transform: scale(0.98);
+        }
+
+        .instructions {
+            margin-top: 24px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+        }
+
+        .instructions h2 {
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .notification {
+            display: none;
+            background: var(--accent-green);
+            color: #000;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            box-shadow: 0 0 15px rgba(0,255,102,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Cyber Engine</h1>
+        <p>Render Cloud Interceptor Panel</p>
+    </div>
+
+    <div class="status-card">
+        <div class="status-row">
+            <span class="label">Server Host:</span>
+            <span class="value" style="font-size: 0.75rem;">aimhackl-proxy-server.onrender.com</span>
+        </div>
+        <div class="status-row">
+            <span class="label">Protocol:</span>
+            <span class="value">VLESS / WS</span>
+        </div>
+        <div class="status-row">
+            <span class="label">Status:</span>
+            <span class="value"><span class="indicator"></span>ONLINE</span>
+        </div>
+    </div>
+
+    <button class="btn-happ" onclick="addNodeToHapp()">
+        ⚡ Add to Happ
+    </button>
+
+    <div id="toast" class="notification">
+        Config Copied! Opening Happ...
+    </div>
+
+    <div class="instructions">
+        <h2>Connection Flow</h2>
+        <ol>
+            <li>Tap <b>Add to Happ</b> above.</li>
+            <li>In <b>Happ</b>, tap <b>+</b> and select <b>Import from Clipboard</b>.</li>
+            <li>Direct Subscription URL: <br><code style="color:var(--accent-cyan);">https://aimhackl-proxy-server.onrender.com/sub</code></li>
+        </ol>
+    </div>
+</div>
+
+<script>
+    const vlessConfig = "vless://b831381d-6324-4d53-ad4f-8cda48b30811@aimhackl-proxy-server.onrender.com:443?encryption=none&type=ws&path=/intercept#CYBER-ENGINE-Cloud";
+
+    function addNodeToHapp() {
+        const toast = document.getElementById('toast');
+
+        navigator.clipboard.writeText(vlessConfig).then(function() {
+            toast.style.display = 'block';
+            setTimeout(function() {
+                toast.style.display = 'none';
+            }, 3500);
+
+            window.location.href = "happ://import";
+        }).catch(function(err) {
+            prompt("Copy configuration manually:", vlessConfig);
+        });
+    }
+</script>
+
+</body>
+</html>
